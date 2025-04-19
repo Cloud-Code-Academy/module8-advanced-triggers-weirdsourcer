@@ -90,7 +90,7 @@ public with sharing class OpportunityTriggerHelper {
             tsk.ActivityDate = Date.today().addDays(3);
             tskToInsert.add(tsk);
         }
-        insert tskToInsert;
+        Database.insert(tskToInsert, AccessLevel.SYSTEM_MODE);
     }
 
     // Append Stage changes in Opportunity Description

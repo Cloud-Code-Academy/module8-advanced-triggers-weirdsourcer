@@ -18,9 +18,6 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler {
         OpportunityTriggerHelper.createTaskForNewOpps(Trigger.new);
     }
 
-    public override void afterUpdate() {
-
-    }
 
     public override void afterDelete() {
         OpportunityTriggerHelper.sendEmailOnOppDel(Trigger.old);
