@@ -25,11 +25,12 @@ trigger AccountTrigger on Account (before insert, after insert) {
     * Trigger should only fire on insert.
     */
     if (Trigger.isBefore && Trigger.isInsert) {
-        for (Account acc : Trigger.new) {
+        /*for (Account acc : Trigger.new) {
             if (acc.Type == null) {
                 acc.Type = 'Prospect';
             }
-        }
+        }*/
+        AccountHelper.setTypeProspect(Trigger.new);
     }
 
     /*
@@ -38,7 +39,7 @@ trigger AccountTrigger on Account (before insert, after insert) {
     * Trigger should only fire on insert.
     */
     if (Trigger.isBefore && Trigger.isInsert) {
-        for (Account acc : Trigger.new) {
+        /*for (Account acc : Trigger.new) {
             if (acc.ShippingStreet != null) {
                 acc.BillingStreet = acc.ShippingStreet;
             }
@@ -58,7 +59,8 @@ trigger AccountTrigger on Account (before insert, after insert) {
             if (acc.ShippingCountry != null) {
                 acc.BillingCountry = acc.ShippingCountry;
             }
-        }        
+        }    */
+        AccountHelper.addressCopy(Trigger.new);
     }
 
     /*
@@ -67,11 +69,12 @@ trigger AccountTrigger on Account (before insert, after insert) {
     * Trigger should only fire on insert.
     */
     if (Trigger.isBefore && Trigger.isInsert) {
-        for (Account acc : Trigger.new) {
+        /*for (Account acc : Trigger.new) {
             if (acc.Phone != null && acc.Website != null && acc.Fax != null) {
                 acc.Rating = 'Hot';
             }
-        }
+        }*/
+        AccountHelper.setRating(Trigger.new);
     }
     
     /*
@@ -82,7 +85,7 @@ trigger AccountTrigger on Account (before insert, after insert) {
     * Trigger should only fire on insert.
     */    
     if(Trigger.isAfter && Trigger.isInsert){     
-        List<Contact> contacts = new List<Contact>();   
+        /*List<Contact> contacts = new List<Contact>();   
         for(Account acc : Trigger.new){
             Contact con = new Contact();
             con.LastName = 'DefaultContact';
@@ -90,6 +93,7 @@ trigger AccountTrigger on Account (before insert, after insert) {
             con.AccountId = acc.Id;
             contacts.add(con);
         }
-        insert contacts; 
+        insert contacts; */
+        AccountHelper.defaultContact(Trigger.new);
     }
 }
