@@ -28,19 +28,54 @@ Always ensure that your helper methods are bulk-safe to handle multiple records 
 */
 public with sharing class AccountHelper {
     
-    public void setTypeProspect(SObject objects){
-
+    public static void setTypeProspect(List<Account> accs){
+        for (Account acc : accs) {
+            if (acc.Type == null) {
+                acc.Type = 'Prospect';
+            }
+        }
     }
 
-    void addressCopy(){
+    public static void addressCopy(List<Account> accs){
+        for (Account acc : accs) {
+            if (String.isNotBlank(acc.ShippingStreet)) {
+                acc.BillingStreet = acc.ShippingStreet;
+                acc.BillingCity = acc.ShippingCity;
+                acc.BillingState = acc.ShippingState;
+                acc.BillingPostalCode = acc.ShippingPostalCode;
+                acc.BillingCountry = acc.ShippingCountry;
+            }
 
+        }
     }
 
     //[public | private ] [static] data_type setRating (input parameters) {
-    //  The body of the method
-    //}
+    public static void setRating (List<Account> accs) {
+        //  The body of the method
+        for (Account acc : accs) {
+            if (String.isNotBlank(String.valueOf(acc.Phone)) && String.isNotBlank(acc.Website) && String.isNotBlank(acc.Fax)) {
+                acc.Rating = 'Hot';
+            }
+        }
+    }
+ 
 
     //[public | private ] [static] data_type defaultContact (input parameters) {
-    //  The body of the method
+    public static void defaultContact (List<Account> accs) {
+        //  The body of the method
+        List<Contact> conToInsert = new List<Contact>();
+        for (Account acc : accs) {
+            Contact con = new Contact();
+            con.LastName = 'DefaultContact';
+            con.Email = 'default@email.com';
+            con.AccountId = acc.Id;
+            conToInsert.add(con);
+        }
+        Database.DMLOptions dmo = new Database.DMLOptions();
+        dmo.DuplicateRuleHeader.AllowSave = true;
+        dmo.DuplicateRuleHeader.RunAsCurrentUser = false;
+        Database.insert(conToInsert, dmo, AccessLevel.SYSTEM_MODE);
+    }
+
     //}
 }
